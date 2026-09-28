@@ -135,7 +135,7 @@ function App() {
 
             {journey === null && (
               <>
-                <img src="/assets/logo-lanzinnis.svg" className="modal-logo" alt="Lanzinnis" />
+                <div className="brand-wordmark modal-wordmark" aria-label="Lanzinnis">LANZINNIS</div>
                 <span className="eyebrow">Como podemos te atender?</span>
                 <h2>Escolha por onde quer começar.</h2>
                 <div className="journey-grid">
@@ -251,7 +251,7 @@ function App() {
       <section className="hero">
         <div className="hero-shade" />
         <div className="hero-content">
-          <img src="/assets/logo-lanzinnis.svg" alt="Lanzinnis" className="hero-logo" />
+          <div className="brand-wordmark hero-wordmark" aria-label="Lanzinnis">LANZINNIS</div>
         </div>
         <button className="reopen" onClick={() => { resetFlow(); setOpen(true); }}>Agendar atendimento</button>
       </section>
