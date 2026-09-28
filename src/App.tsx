@@ -68,8 +68,8 @@ function App() {
 
           <div className="slider-column">
             <CompareSlider
-              beforeSrc="/assets/protese-antes.jpg"
-              afterSrc="/assets/protese-depois.jpg"
+              beforeSrc="/assets/protese-antes.svg"
+              afterSrc="/assets/protese-depois.svg"
             />
             <p className="slider-caption">Arraste para comparar o antes e depois de um resultado real.</p>
           </div>
