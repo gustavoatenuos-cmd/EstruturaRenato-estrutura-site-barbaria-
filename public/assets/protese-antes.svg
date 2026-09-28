@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8d1c8"/><stop offset="1" stop-color="#a99f93"/></linearGradient></defs>
+<rect width="800" height="1000" fill="url(#g)"/>
+<ellipse cx="400" cy="420" rx="220" ry="280" fill="#c69f82"/>
+<path d="M190 410c35-180 120-275 210-275s180 95 210 275c-65-42-133-62-210-62s-145 20-210 62Z" fill="#8b6b57" opacity=".25"/>
+<path d="M245 345c38-65 92-98 155-98 64 0 120 34 158 100-52-23-105-34-158-34-52 0-104 11-155 32Z" fill="#b78f76" opacity=".95"/>
+<path d="M280 600c70 68 170 68 240 0" fill="none" stroke="#704d3d" stroke-width="18" stroke-linecap="round"/>
+<rect x="120" y="760" width="560" height="190" rx="95" fill="#242424"/>
+<text x="400" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111">ANTES</text>
+</svg>
