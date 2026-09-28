@@ -19,3 +19,31 @@
 
 @media(max-width:860px){.section{padding:76px 0}.two-columns,.barber-call{grid-template-columns:1fr;gap:42px}.journey-grid,.booking-choice-grid{grid-template-columns:1fr}.entry-modal{padding:34px 22px}.steps{grid-template-columns:1fr}.services-options{grid-template-columns:1fr}.hero{min-height:76vh}.hero-logo{width:min(420px,82vw)}}
 @media(max-width:560px){.shell{width:calc(100% - 26px)}.entry-backdrop{padding:10px}.entry-modal{border-radius:20px;max-height:calc(100vh - 20px)}.modal-logo{width:155px}.option-grid.three{grid-template-columns:1fr}.option-grid.two{grid-template-columns:1fr}.journey-card,.booking-choice{min-height:190px;padding:22px}.journey-card strong,.booking-choice strong{font-size:21px}.button{width:100%}.reopen{white-space:nowrap}h1{font-size:clamp(42px,13vw,60px)}h2{font-size:clamp(38px,11vw,54px)}}
+
+.service-heading small{display:block;color:#817b73;line-height:1.45;margin-top:-4px}
+.smart-services{margin-top:12px}
+.service-option{justify-content:space-between;text-align:left;padding:11px 14px}
+.service-name{display:flex;align-items:center;gap:7px}
+.service-option strong{font-size:13px;white-space:nowrap}
+.combo-suggestions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.combo-title{grid-column:1/-1;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;color:#817b73;margin-top:4px}
+.combo-card{position:relative;border:1px solid #d5d0c8;background:#fff;border-radius:16px;padding:17px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:86px}
+.combo-card:hover{border-color:#111}
+.combo-card span:not(.popular-badge){display:grid;gap:5px}
+.combo-card b{font-size:14px}
+.combo-card small{font-size:11px;line-height:1.35;color:#817b73}
+.combo-card>strong{white-space:nowrap;font-size:15px}
+.combo-card.popular{border-color:#111;padding-top:28px}
+.popular-badge{position:absolute;top:-1px;left:16px;background:#111;color:#fff;border-radius:0 0 8px 8px;padding:5px 8px;font-size:9px;letter-spacing:.13em;font-weight:900}
+.smart-summary{margin-top:13px;background:#111;color:#fff;border-radius:17px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.smart-summary div{display:grid;gap:4px}
+.smart-summary small{font-size:9px;letter-spacing:.12em;color:#aaa59e;font-weight:900}
+.smart-summary strong{font-size:15px}
+.smart-summary>b{font-size:18px;white-space:nowrap}
+
+@media(max-width:560px){
+  .combo-suggestions{grid-template-columns:1fr}
+  .combo-title{grid-column:auto}
+  .service-option{min-height:54px}
+  .smart-summary{align-items:flex-start}
+}
