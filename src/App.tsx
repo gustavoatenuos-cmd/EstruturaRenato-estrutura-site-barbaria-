@@ -34,6 +34,7 @@ function App() {
   const [selectedServices, setSelectedServices] = useState<ServiceId[]>([]);
   const [period, setPeriod] = useState("");
   const [days, setDays] = useState("");
+  const [compareView, setCompareView] = useState<"perfil" | "frente">("perfil");
 
   const selection = useMemo(() => {
     const has = (id: ServiceId) => selectedServices.includes(id);
@@ -107,6 +108,21 @@ function App() {
   function applyCombo(ids: ServiceId[]) {
     setSelectedServices(ids);
   }
+
+  const compareOptions = {
+    perfil: {
+      title: "Perfil / lateral",
+      before: "/assets/protese-perfil-antes.jpg",
+      after: "/assets/protese-perfil-depois.jpg",
+    },
+    frente: {
+      title: "Frente",
+      before: "/assets/protese-frente-antes.jpg",
+      after: "/assets/protese-frente-depois.jpg",
+    },
+  } as const;
+
+  const activeCompare = compareOptions[compareView];
 
   const validBooking = Boolean(name.trim() && selectedServices.length && period && days);
 
@@ -254,8 +270,32 @@ function App() {
             <a className="button primary" href={whatsappUrl("Olá, vim pelo site e gostaria de agendar uma avaliação para prótese capilar.")} target="_blank" rel="noreferrer">Quero uma avaliação <MessageCircle size={18}/></a>
           </div>
           <div className="slider-wrap">
-            <CompareSlider beforeSrc="/assets/protese-antes.svg" afterSrc="/assets/protese-depois.svg" />
-            <div className="slider-note">Arraste a divisão para revelar o antes e depois.</div>
+            <div className="compare-switcher" aria-label="Escolha o ângulo da comparação">
+              <button
+                className={compareView === "perfil" ? "compare-tab active" : "compare-tab"}
+                onClick={() => setCompareView("perfil")}
+                type="button"
+              >
+                Perfil / lateral
+              </button>
+              <button
+                className={compareView === "frente" ? "compare-tab active" : "compare-tab"}
+                onClick={() => setCompareView("frente")}
+                type="button"
+              >
+                Frente
+              </button>
+            </div>
+
+            <CompareSlider
+              key={compareView}
+              beforeSrc={activeCompare.before}
+              afterSrc={activeCompare.after}
+            />
+
+            <div className="slider-note">
+              <strong>{activeCompare.title}</strong> · arraste a divisão para revelar o antes e depois.
+            </div>
           </div>
         </div>
       </section>
