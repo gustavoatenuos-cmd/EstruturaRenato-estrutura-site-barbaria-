@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8d1c8"/><stop offset="1" stop-color="#a99f93"/></linearGradient></defs>
+<rect width="800" height="1000" fill="url(#g)"/>
+<ellipse cx="400" cy="420" rx="220" ry="280" fill="#c69f82"/>
+<path d="M185 410c26-210 112-320 215-320 112 0 196 111 220 320-68-48-141-72-220-72-79 0-151 24-215 72Z" fill="#29231f"/>
+<path d="M205 318c48-93 115-140 198-140 86 0 153 48 200 144-72-31-139-46-202-46-64 0-129 14-196 42Z" fill="#3b302a"/>
+<path d="M280 600c70 68 170 68 240 0" fill="none" stroke="#704d3d" stroke-width="18" stroke-linecap="round"/>
+<rect x="120" y="760" width="560" height="190" rx="95" fill="#242424"/>
+<text x="400" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111">DEPOIS</text>
+</svg>
