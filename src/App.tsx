@@ -68,7 +68,7 @@ function App() {
 
             {journey === null && (
               <>
-                <img src="/assets/logo-lanzinnis.png" className="modal-logo" alt="Lanzinnis" />
+                <img src="/assets/logo-lanzinnis.svg" className="modal-logo" alt="Lanzinnis" />
                 <span className="eyebrow">Como podemos te atender?</span>
                 <h2>Escolha por onde quer começar.</h2>
                 <div className="journey-grid">
@@ -149,7 +149,7 @@ function App() {
       <section className="hero">
         <div className="hero-shade" />
         <div className="hero-content">
-          <img src="/assets/logo-lanzinnis.png" alt="Lanzinnis" className="hero-logo" />
+          <img src="/assets/logo-lanzinnis.svg" alt="Lanzinnis" className="hero-logo" />
         </div>
         <button className="reopen" onClick={() => { resetFlow(); setOpen(true); }}>Agendar atendimento</button>
       </section>
@@ -168,7 +168,7 @@ function App() {
             <a className="button primary" href={whatsappUrl("Olá, vim pelo site da Lanzinnis e quero fazer uma avaliação para prótese capilar.")} target="_blank" rel="noreferrer">Quero uma avaliação <MessageCircle size={18}/></a>
           </div>
           <div className="slider-wrap">
-            <CompareSlider beforeSrc="/assets/protese-antes.jpg" afterSrc="/assets/protese-depois.jpg" />
+            <CompareSlider beforeSrc="/assets/protese-antes.svg" afterSrc="/assets/protese-depois.svg" />
             <div className="slider-note">Arraste a divisão para revelar o antes e depois.</div>
           </div>
         </div>
