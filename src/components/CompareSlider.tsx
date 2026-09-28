@@ -24,6 +24,10 @@ export function CompareSlider({
     setPosition(Math.max(0, Math.min(100, next)));
   }, []);
 
+  const fadeStart = Math.max(0, position - 7);
+  const fadeEnd = Math.min(100, position + 7);
+  const mask = `linear-gradient(to right, #000 0%, #000 ${fadeStart}%, rgba(0,0,0,.45) ${position}%, transparent ${fadeEnd}%, transparent 100%)`;
+
   return (
     <div
       ref={ref}
@@ -47,14 +51,21 @@ export function CompareSlider({
       }}
     >
       <img src={afterSrc} alt={afterAlt} className="compare-image" draggable={false} />
-      <div className="compare-before" style={{ width: `${position}%` }}>
-        <img src={beforeSrc} alt={beforeAlt} className="compare-image compare-before-image" draggable={false} />
+
+      <div
+        className="compare-before-soft"
+        style={{
+          WebkitMaskImage: mask,
+          maskImage: mask,
+        }}
+      >
+        <img src={beforeSrc} alt={beforeAlt} className="compare-image" draggable={false} />
       </div>
 
       <div className="compare-label compare-label-left">ANTES</div>
       <div className="compare-label compare-label-right">DEPOIS</div>
 
-      <div className="compare-line" style={{ left: `${position}%` }}>
+      <div className="compare-line soft" style={{ left: `${position}%` }}>
         <div className="compare-handle">
           <GripVertical size={20} />
         </div>
