@@ -6,14 +6,13 @@ const PHONE = "5543999522591";
 
 type Journey = "barbearia" | "protese" | null;
 type Step = "choice" | "booking";
+type ServiceId = "corte" | "navalhado" | "barba" | "sobrancelha";
 
-const services = [
-  "Corte de cabelo",
-  "Corte navalhado",
-  "Corte + barba",
-  "Corte + barba + sobrancelha",
-  "Barba",
-  "Sobrancelha",
+const serviceCatalog: Array<{ id: ServiceId; label: string; price: number }> = [
+  { id: "corte", label: "Corte de cabelo", price: 40 },
+  { id: "navalhado", label: "Corte navalhado", price: 45 },
+  { id: "barba", label: "Barba", price: 25 },
+  { id: "sobrancelha", label: "Sobrancelha", price: 15 },
 ];
 
 const periods = ["Manhã", "Tarde", "Noite"];
@@ -23,25 +22,57 @@ function whatsappUrl(message: string) {
   return `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
 }
 
+function formatPrice(value: number) {
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
+}
+
 function App() {
   const [open, setOpen] = useState(true);
   const [journey, setJourney] = useState<Journey>(null);
   const [step, setStep] = useState<Step>("choice");
   const [name, setName] = useState("");
-  const [service, setService] = useState("");
+  const [selectedServices, setSelectedServices] = useState<ServiceId[]>([]);
   const [period, setPeriod] = useState("");
   const [days, setDays] = useState("");
 
+  const selection = useMemo(() => {
+    const has = (id: ServiceId) => selectedServices.includes(id);
+    const haircut = has("navalhado") ? "navalhado" : has("corte") ? "corte" : null;
+    const total = selectedServices.reduce((sum, id) => sum + (serviceCatalog.find((s) => s.id === id)?.price ?? 0), 0);
+
+    let label = selectedServices
+      .map((id) => serviceCatalog.find((s) => s.id === id)?.label)
+      .filter(Boolean)
+      .join(" + ");
+
+    let combo = false;
+    if (haircut && has("barba") && has("sobrancelha")) {
+      label = `${haircut === "navalhado" ? "Corte navalhado" : "Corte"} + barba + sobrancelha`;
+      combo = true;
+    } else if (haircut && has("barba")) {
+      label = `${haircut === "navalhado" ? "Corte navalhado" : "Corte"} + barba`;
+      combo = true;
+    } else if (haircut && has("sobrancelha")) {
+      label = `${haircut === "navalhado" ? "Corte navalhado" : "Corte"} + sobrancelha`;
+      combo = true;
+    } else if (has("barba") && has("sobrancelha")) {
+      label = "Barba + sobrancelha";
+      combo = true;
+    }
+
+    return { label, total, combo };
+  }, [selectedServices]);
+
   const personalizedMessage = useMemo(() => {
     const firstName = name.trim() || "cliente";
-    return `Olá, meu nome é ${firstName}. Quero fazer ${service || "um serviço de barbearia"} e pretendo agendar ${days ? days.toLowerCase() : "em um dia disponível"} ${period ? `na parte da ${period.toLowerCase()}` : ""}. Vim pelo site da Lanzinnis.`;
-  }, [name, service, period, days]);
+    return `Olá, meu nome é ${firstName}. Quero fazer ${selection.label || "um serviço de barbearia"} (${formatPrice(selection.total)}) e pretendo agendar ${days ? days.toLowerCase() : "em um dia disponível"} ${period ? `na parte da ${period.toLowerCase()}` : ""}. Encontrei a Lanzinnis pelo site.`;
+  }, [name, selection, period, days]);
 
   function resetFlow() {
     setJourney(null);
     setStep("choice");
     setName("");
-    setService("");
+    setSelectedServices([]);
     setPeriod("");
     setDays("");
   }
@@ -57,7 +88,27 @@ function App() {
     document.getElementById("protese")?.scrollIntoView({ behavior: "smooth" });
   }
 
-  const validBooking = name.trim() && service && period && days;
+  function toggleService(id: ServiceId) {
+    setSelectedServices((current) => {
+      let next = [...current];
+
+      if (id === "corte" || id === "navalhado") {
+        next = next.filter((item) => item !== "corte" && item !== "navalhado");
+        if (!current.includes(id)) next.push(id);
+        return next;
+      }
+
+      return current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id];
+    });
+  }
+
+  function applyCombo(ids: ServiceId[]) {
+    setSelectedServices(ids);
+  }
+
+  const validBooking = Boolean(name.trim() && selectedServices.length && period && days);
 
   return (
     <main>
@@ -94,7 +145,7 @@ function App() {
                 <span className="eyebrow">Barbearia</span>
                 <h2>Como você prefere agendar?</h2>
                 <div className="booking-choice-grid">
-                  <a className="booking-choice" href={whatsappUrl("Olá, vim pelo site da Lanzinnis e quero agendar um horário na barbearia.")} target="_blank" rel="noreferrer">
+                  <a className="booking-choice" href={whatsappUrl("Olá, vim pelo site e gostaria de agendar um horário na barbearia.")} target="_blank" rel="noreferrer">
                     <MessageCircle size={26} />
                     <strong>Agendamento rápido</strong>
                     <span>Abra o WhatsApp e fale direto com a equipe.</span>
@@ -118,12 +169,47 @@ function App() {
                   <label className="field-label">Seu nome</label>
                   <div className="name-field"><UserRound size={18} /><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Gustavo" /></div>
 
-                  <label className="field-label">O que você quer fazer?</label>
-                  <div className="option-grid services-options">
-                    {services.map((item) => (
-                      <button key={item} className={service === item ? "option selected" : "option"} onClick={() => setService(item)}>{service === item && <Check size={14} />}{item}</button>
-                    ))}
+                  <div className="service-heading">
+                    <div>
+                      <label className="field-label">O que você quer fazer?</label>
+                      <small>Você pode escolher mais de um serviço. O sistema monta o combo automaticamente.</small>
+                    </div>
                   </div>
+
+                  <div className="option-grid services-options smart-services">
+                    {serviceCatalog.map((item) => {
+                      const active = selectedServices.includes(item.id);
+                      return (
+                        <button key={item.id} className={active ? "option service-option selected" : "option service-option"} onClick={() => toggleService(item.id)}>
+                          <span className="service-name">{active && <Check size={14} />}{item.label}</span>
+                          <strong>{formatPrice(item.price)}</strong>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="combo-suggestions">
+                    <span className="combo-title">Combos</span>
+                    <button className="combo-card" onClick={() => applyCombo(["corte", "barba"])}>
+                      <span><b>Corte + barba</b><small>O sistema também monta esse combo se você selecionar os dois serviços.</small></span>
+                      <strong>R$ 65</strong>
+                    </button>
+                    <button className="combo-card popular" onClick={() => applyCombo(["corte", "barba", "sobrancelha"])}>
+                      <span className="popular-badge">MAIS PEDIDO</span>
+                      <span><b>Corte + barba + sobrancelha</b><small>Visual completo em uma única seleção.</small></span>
+                      <strong>R$ 80</strong>
+                    </button>
+                  </div>
+
+                  {selectedServices.length > 0 && (
+                    <div className="smart-summary">
+                      <div>
+                        <small>{selection.combo ? "COMBO MONTADO AUTOMATICAMENTE" : "SERVIÇO SELECIONADO"}</small>
+                        <strong>{selection.label}</strong>
+                      </div>
+                      <b>{formatPrice(selection.total)}</b>
+                    </div>
+                  )}
 
                   <label className="field-label">Qual período fica melhor?</label>
                   <div className="option-grid three">
@@ -165,7 +251,7 @@ function App() {
               <span><Check size={15}/> Aplicação e integração</span>
               <span><Check size={15}/> Manutenção e higienização</span>
             </div>
-            <a className="button primary" href={whatsappUrl("Olá, vim pelo site da Lanzinnis e quero fazer uma avaliação para prótese capilar.")} target="_blank" rel="noreferrer">Quero uma avaliação <MessageCircle size={18}/></a>
+            <a className="button primary" href={whatsappUrl("Olá, vim pelo site e gostaria de agendar uma avaliação para prótese capilar.")} target="_blank" rel="noreferrer">Quero uma avaliação <MessageCircle size={18}/></a>
           </div>
           <div className="slider-wrap">
             <CompareSlider beforeSrc="/assets/protese-antes.svg" afterSrc="/assets/protese-depois.svg" />
@@ -196,7 +282,7 @@ function App() {
         </div>
       </section>
 
-      <a className="whatsapp-float" href={whatsappUrl("Olá, vim pelo site da Lanzinnis.")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={24}/></a>
+      <a className="whatsapp-float" href={whatsappUrl("Olá, vim pelo site e gostaria de falar com a Lanzinnis.")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={24}/></a>
     </main>
   );
 }
