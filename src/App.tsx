@@ -1,185 +1,202 @@
-import {
-  ArrowRight,
-  Check,
-  MapPin,
-  MessageCircle,
-  Scissors,
-  Sparkles,
-  Star,
-} from "lucide-react";
+import { useMemo, useState } from "react";
+import { ArrowRight, CalendarDays, Check, ChevronLeft, MessageCircle, Scissors, Sparkles, UserRound, X } from "lucide-react";
 import { CompareSlider } from "./components/CompareSlider";
 
-const whatsapp = "https://wa.me/5543999522591?text=Oi%2C%20vim%20pelo%20site%20da%20Lanzinnis%20e%20quero%20agendar%20uma%20avalia%C3%A7%C3%A3o.";
-const whatsappBarber = "https://wa.me/5543999522591?text=Oi%2C%20vim%20pelo%20site%20da%20Lanzinnis%20e%20quero%20agendar%20um%20hor%C3%A1rio.";
+const PHONE = "5543999522591";
 
-const barberServices = [
-  "Corte masculino",
+type Journey = "barbearia" | "protese" | null;
+type Step = "choice" | "booking";
+
+const services = [
+  "Corte de cabelo",
+  "Corte navalhado",
   "Corte + barba",
+  "Corte + barba + sobrancelha",
   "Barba",
   "Sobrancelha",
-  "Limpeza de pele",
 ];
 
-const prosthesisServices = [
-  "Avaliação personalizada",
-  "Aplicação de prótese capilar",
-  "Manutenção e higienização",
-  "Retirada e reaplicação",
-  "Ajuste e personalização",
-  "Corte e integração",
-];
+const periods = ["Manhã", "Tarde", "Noite"];
+const dayOptions = ["Durante a semana", "Final de semana"];
+
+function whatsappUrl(message: string) {
+  return `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
+}
 
 function App() {
+  const [open, setOpen] = useState(true);
+  const [journey, setJourney] = useState<Journey>(null);
+  const [step, setStep] = useState<Step>("choice");
+  const [name, setName] = useState("");
+  const [service, setService] = useState("");
+  const [period, setPeriod] = useState("");
+  const [days, setDays] = useState("");
+
+  const personalizedMessage = useMemo(() => {
+    const firstName = name.trim() || "cliente";
+    return `Olá, meu nome é ${firstName}. Quero fazer ${service || "um serviço de barbearia"} e pretendo agendar ${days ? days.toLowerCase() : "em um dia disponível"} ${period ? `na parte da ${period.toLowerCase()}` : ""}. Vim pelo site da Lanzinnis.`;
+  }, [name, service, period, days]);
+
+  function resetFlow() {
+    setJourney(null);
+    setStep("choice");
+    setName("");
+    setService("");
+    setPeriod("");
+    setDays("");
+  }
+
+  function chooseBarber() {
+    setJourney("barbearia");
+    setStep("choice");
+  }
+
+  function chooseProsthesis() {
+    setJourney("protese");
+    setOpen(false);
+    document.getElementById("protese")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  const validBooking = name.trim() && service && period && days;
+
   return (
     <main>
-      <section className="hero" id="inicio">
-        <div className="hero-overlay" />
-        <div className="hero-content">
-          <img src="/assets/logo-lanzinnis.svg" alt="Lanzinnis" className="hero-logo" />
-          <span className="hero-kicker">Prótese capilar & barbearia • Londrina</span>
+      {open && (
+        <div className="entry-backdrop" role="dialog" aria-modal="true" aria-label="Escolha seu atendimento">
+          <div className="entry-modal">
+            <button className="modal-close" onClick={() => setOpen(false)} aria-label="Fechar"><X size={20} /></button>
+
+            {journey === null && (
+              <>
+                <img src="/assets/logo-lanzinnis.png" className="modal-logo" alt="Lanzinnis" />
+                <span className="eyebrow">Como podemos te atender?</span>
+                <h2>Escolha por onde quer começar.</h2>
+                <div className="journey-grid">
+                  <button className="journey-card" onClick={chooseBarber}>
+                    <Scissors size={28} />
+                    <strong>Barbearia</strong>
+                    <span>Corte, barba, sobrancelha e atendimento personalizado.</span>
+                    <em>Quero agendar <ArrowRight size={16} /></em>
+                  </button>
+                  <button className="journey-card dark" onClick={chooseProsthesis}>
+                    <Sparkles size={28} />
+                    <strong>Prótese capilar</strong>
+                    <span>Conheça o processo, veja o antes e depois e solicite uma avaliação.</span>
+                    <em>Conhecer prótese <ArrowRight size={16} /></em>
+                  </button>
+                </div>
+              </>
+            )}
+
+            {journey === "barbearia" && step === "choice" && (
+              <>
+                <button className="back-link" onClick={resetFlow}><ChevronLeft size={16} /> voltar</button>
+                <span className="eyebrow">Barbearia</span>
+                <h2>Como você prefere agendar?</h2>
+                <div className="booking-choice-grid">
+                  <a className="booking-choice" href={whatsappUrl("Olá, vim pelo site da Lanzinnis e quero agendar um horário na barbearia.")} target="_blank" rel="noreferrer">
+                    <MessageCircle size={26} />
+                    <strong>Agendamento rápido</strong>
+                    <span>Abra o WhatsApp e fale direto com a equipe.</span>
+                  </a>
+                  <button className="booking-choice" onClick={() => setStep("booking")}>
+                    <CalendarDays size={26} />
+                    <strong>Agendamento personalizado</strong>
+                    <span>Informe serviço, período e disponibilidade antes de ir ao WhatsApp.</span>
+                  </button>
+                </div>
+              </>
+            )}
+
+            {journey === "barbearia" && step === "booking" && (
+              <>
+                <button className="back-link" onClick={() => setStep("choice")}><ChevronLeft size={16} /> voltar</button>
+                <span className="eyebrow">Agendamento personalizado</span>
+                <h2>Monte seu pedido em menos de 1 minuto.</h2>
+
+                <div className="booking-form">
+                  <label className="field-label">Seu nome</label>
+                  <div className="name-field"><UserRound size={18} /><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Gustavo" /></div>
+
+                  <label className="field-label">O que você quer fazer?</label>
+                  <div className="option-grid services-options">
+                    {services.map((item) => (
+                      <button key={item} className={service === item ? "option selected" : "option"} onClick={() => setService(item)}>{service === item && <Check size={14} />}{item}</button>
+                    ))}
+                  </div>
+
+                  <label className="field-label">Qual período fica melhor?</label>
+                  <div className="option-grid three">
+                    {periods.map((item) => <button key={item} className={period === item ? "option selected" : "option"} onClick={() => setPeriod(item)}>{item}</button>)}
+                  </div>
+
+                  <label className="field-label">Quando você prefere?</label>
+                  <div className="option-grid two">
+                    {dayOptions.map((item) => <button key={item} className={days === item ? "option selected" : "option"} onClick={() => setDays(item)}>{item}</button>)}
+                  </div>
+
+                  <a className={validBooking ? "button primary booking-submit" : "button primary booking-submit disabled"} href={validBooking ? whatsappUrl(personalizedMessage) : undefined} target="_blank" rel="noreferrer" aria-disabled={!validBooking}>
+                    Finalizar no WhatsApp <MessageCircle size={18} />
+                  </a>
+                  {!validBooking && <small className="helper">Preencha nome, serviço, período e disponibilidade para continuar.</small>}
+                </div>
+              </>
+            )}
+          </div>
         </div>
-        <a className="hero-scroll" href="#protese">Conhecer prótese capilar <ArrowRight size={17} /></a>
+      )}
+
+      <section className="hero">
+        <div className="hero-shade" />
+        <div className="hero-content">
+          <img src="/assets/logo-lanzinnis.png" alt="Lanzinnis" className="hero-logo" />
+        </div>
+        <button className="reopen" onClick={() => { resetFlow(); setOpen(true); }}>Agendar atendimento</button>
       </section>
 
       <section className="section prosthesis" id="protese">
         <div className="shell two-columns">
           <div className="section-copy">
             <span className="eyebrow">Prótese capilar masculina</span>
-            <h1>Naturalidade que você percebe no espelho. Não na prótese.</h1>
-            <p className="lead">
-              Avaliação, aplicação e manutenção em um processo pensado para integrar corte,
-              densidade e acabamento ao seu estilo.
-            </p>
-
-            <div className="check-grid">
-              {prosthesisServices.map((item) => (
-                <div className="check-item" key={item}>
-                  <span><Check size={15} /></span>
-                  {item}
-                </div>
-              ))}
+            <h1>Veja a diferença antes de decidir.</h1>
+            <p className="lead">A proposta é integrar densidade, linha frontal e corte ao seu rosto de forma natural. Arraste a foto e compare o resultado.</p>
+            <div className="mini-points">
+              <span><Check size={15}/> Avaliação personalizada</span>
+              <span><Check size={15}/> Aplicação e integração</span>
+              <span><Check size={15}/> Manutenção e higienização</span>
             </div>
-
-            <a className="button primary" href={whatsapp} target="_blank" rel="noreferrer">
-              Quero fazer uma avaliação <MessageCircle size={18} />
-            </a>
+            <a className="button primary" href={whatsappUrl("Olá, vim pelo site da Lanzinnis e quero fazer uma avaliação para prótese capilar.")} target="_blank" rel="noreferrer">Quero uma avaliação <MessageCircle size={18}/></a>
           </div>
-
-          <div className="slider-column">
-            <CompareSlider
-              beforeSrc="/assets/protese-antes.svg"
-              afterSrc="/assets/protese-depois.svg"
-            />
-            <p className="slider-caption">Arraste para comparar o antes e depois de um resultado real.</p>
+          <div className="slider-wrap">
+            <CompareSlider beforeSrc="/assets/protese-antes.jpg" afterSrc="/assets/protese-depois.jpg" />
+            <div className="slider-note">Arraste a divisão para revelar o antes e depois.</div>
           </div>
         </div>
       </section>
 
-      <section className="section process">
+      <section className="section how">
         <div className="shell">
-          <div className="section-heading centered">
-            <span className="eyebrow">Como funciona</span>
-            <h2>Um processo simples do primeiro contato à manutenção.</h2>
-          </div>
-
-          <div className="process-grid">
-            <article className="process-card">
-              <div className="step">01</div>
-              <Sparkles size={24} />
-              <h3>Avaliação</h3>
-              <p>Entendemos seu objetivo, rotina, estilo de corte e o resultado que você busca.</p>
-            </article>
-            <article className="process-card featured">
-              <div className="step">02</div>
-              <Scissors size={24} />
-              <h3>Aplicação</h3>
-              <p>Ajuste, corte e integração para construir um acabamento natural e coerente com você.</p>
-            </article>
-            <article className="process-card">
-              <div className="step">03</div>
-              <Check size={24} />
-              <h3>Manutenção</h3>
-              <p>Higienização, retirada, reaplicação e ajustes para manter o resultado no dia a dia.</p>
-            </article>
+          <span className="eyebrow">Como funciona</span>
+          <div className="steps">
+            <article><b>01</b><h3>Avaliação</h3><p>Entendemos seu objetivo, rotina e estilo de corte.</p></article>
+            <article><b>02</b><h3>Aplicação</h3><p>Ajuste, corte e acabamento para integrar a prótese ao visual.</p></article>
+            <article><b>03</b><h3>Manutenção</h3><p>Higienização, retirada, reaplicação e os ajustes necessários.</p></article>
           </div>
         </div>
       </section>
 
-      <section className="section barber" id="barbearia">
-        <div className="shell two-columns reverse-mobile">
-          <div className="barber-visual">
-            <div className="barber-mark">
-              <Scissors size={28} />
-              <span>BARBEARIA</span>
-            </div>
-            <div className="barber-quote">Seu corte continua sendo parte do resultado.</div>
-          </div>
-
-          <div className="section-copy">
+      <section className="section barber-section">
+        <div className="shell barber-call">
+          <div>
             <span className="eyebrow">Barbearia Lanzinnis</span>
-            <h2>Do visual completo ao cuidado de rotina.</h2>
-            <p className="lead">
-              Além da prótese capilar, você encontra os serviços tradicionais da barbearia em um
-              ambiente pensado para atendimento próximo e acabamento bem feito.
-            </p>
-
-            <div className="services-list">
-              {barberServices.map((item) => (
-                <div key={item} className="service-row">
-                  <span>{item}</span>
-                  <ArrowRight size={16} />
-                </div>
-              ))}
-            </div>
-
-            <a className="button secondary" href={whatsappBarber} target="_blank" rel="noreferrer">
-              Agendar na barbearia <MessageCircle size={18} />
-            </a>
+            <h2>Quer só cortar, fazer a barba ou cuidar do visual?</h2>
+            <p className="lead">Você também pode usar o agendamento personalizado e chegar no WhatsApp com tudo definido.</p>
           </div>
+          <button className="button light" onClick={() => { setJourney("barbearia"); setStep("choice"); setOpen(true); }}>Agendar barbearia <Scissors size={18}/></button>
         </div>
       </section>
 
-      <section className="section proof">
-        <div className="shell proof-grid">
-          <div>
-            <span className="eyebrow">Atendimento em Londrina</span>
-            <h2>Um lugar para cuidar do visual sem complicação.</h2>
-          </div>
-          <div className="proof-card">
-            <div className="stars">
-              {[0,1,2,3,4].map((n) => <Star key={n} size={18} fill="currentColor" />)}
-            </div>
-            <p>
-              Atendimento personalizado, foco em naturalidade, discrição e conforto em cada etapa.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="contact">
-        <div className="shell contact-grid">
-          <div>
-            <img src="/assets/logo-lanzinnis.svg" alt="Lanzinnis" className="footer-logo" />
-            <p>Prótese capilar masculina e barbearia em Londrina.</p>
-          </div>
-          <div className="contact-item">
-            <MapPin size={20} />
-            <div><strong>Endereço</strong><span>Rua Cajá, 22 • Londrina, PR</span></div>
-          </div>
-          <div className="contact-item">
-            <MessageCircle size={20} />
-            <div><strong>WhatsApp</strong><a href={whatsapp} target="_blank" rel="noreferrer">(43) 99952-2591</a></div>
-          </div>
-          <div className="contact-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            <div><strong>Instagram</strong><a href="https://instagram.com/lanzinnisbarber" target="_blank" rel="noreferrer">@lanzinnisbarber</a></div>
-          </div>
-        </div>
-      </section>
-
-      <a className="whatsapp-float" href={whatsapp} target="_blank" rel="noreferrer" aria-label="Falar no WhatsApp">
-        <MessageCircle size={24} />
-      </a>
+      <a className="whatsapp-float" href={whatsappUrl("Olá, vim pelo site da Lanzinnis.")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle size={24}/></a>
     </main>
   );
 }
