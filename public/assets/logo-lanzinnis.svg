@@ -1,8 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 260" role="img" aria-label="Lanzinnis">
-  <rect width="900" height="260" fill="transparent"/>
-  <g fill="currentColor">
-    <text x="450" y="120" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="92" font-weight="900" letter-spacing="5">LANZINNIS</text>
-    <text x="450" y="172" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="11">BARBEARIA</text>
-    <path d="M185 199h530v3H185z"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 260" role="img" aria-labelledby="title">
+  <title id="title">Lanzinnis</title>
+  <rect width="1200" height="260" fill="transparent"/>
+  <text
+    x="600"
+    y="178"
+    text-anchor="middle"
+    fill="#111111"
+    font-family="Montserrat, Poppins, Avenir Next, Futura, Arial, sans-serif"
+    font-size="176"
+    font-weight="300"
+    letter-spacing="18"
+  >LANZINNIS</text>
 </svg>
