@@ -47,3 +47,9 @@
   .service-option{min-height:54px}
   .smart-summary{align-items:flex-start}
 }
+
+.compare-switcher{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.compare-tab{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid #d5d0c8;background:#fff;color:#111;font-weight:850;transition:.2s ease}
+.compare-tab:hover{transform:translateY(-1px);border-color:#111}
+.compare-tab.active{background:#111;color:#fff;border-color:#111}
+.slider-note strong{color:#111}
