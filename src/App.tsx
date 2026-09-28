@@ -112,13 +112,13 @@ function App() {
   const compareOptions = {
     perfil: {
       title: "Perfil / lateral",
-      before: "/assets/protese-perfil-antes.jpg",
-      after: "/assets/protese-perfil-depois.jpg",
+      before: "https://i.imgur.com/j7UBqTQ.png",
+      after: "https://i.imgur.com/UiHnWNQ.png",
     },
     frente: {
       title: "Frente",
-      before: "/assets/protese-frente-antes.jpg",
-      after: "/assets/protese-frente-depois.jpg",
+      before: "https://i.imgur.com/nBs53sq.png",
+      after: "https://i.imgur.com/uZ9tXsm.png",
     },
   } as const;
 
