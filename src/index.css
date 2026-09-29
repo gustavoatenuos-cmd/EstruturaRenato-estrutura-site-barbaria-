@@ -55,26 +55,66 @@
 .slider-note strong{color:#111}
 
 
-.brand-wordmark{
-  font-family:"Montserrat",Arial,sans-serif;
-  font-weight:300;
-  letter-spacing:.18em;
+
+  .hero-wordmark{font-size:clamp(42px,14vw,68px)}
+  .modal-wordmark{font-size:34px}
+}
+
+
+/* Identidade tipográfica Lanzinnis */
+.lz-logo{
+  color:currentColor;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+}
+.lz-word{
+  font-family:"Marcellus", Optima, "Segoe UI", sans-serif;
+  font-weight:400;
+  letter-spacing:.06em;
   line-height:1;
-  text-transform:uppercase;
+  display:inline-flex;
+  align-items:baseline;
   white-space:nowrap;
 }
+.lz-a{
+  width:.82em;
+  height:.70em;
+  overflow:visible;
+  margin:0 .02em 0 -.02em;
+  flex:0 0 auto;
+}
+.lz-a path{
+  fill:none;
+  stroke:currentColor;
+  stroke-linecap:round;
+  stroke-dasharray:260;
+  stroke-dashoffset:260;
+  animation:lz-draw 1.35s cubic-bezier(.6,0,.2,1) forwards;
+}
+.lz-a path:nth-child(2){animation-delay:.14s}
+.lz-a path:nth-child(3){animation-delay:.28s}
+@keyframes lz-draw{to{stroke-dashoffset:0}}
+
 .hero-wordmark{
   color:#fff;
-  font-size:clamp(52px,8vw,118px);
+  font-size:clamp(58px,9vw,132px);
   text-shadow:0 12px 34px rgba(0,0,0,.28);
 }
 .modal-wordmark{
   color:#111;
-  font-size:clamp(34px,5vw,54px);
+  font-size:clamp(42px,6vw,68px);
+  justify-content:flex-start;
   margin-bottom:34px;
 }
+
 @media(max-width:560px){
-  .brand-wordmark{letter-spacing:.12em}
-  .hero-wordmark{font-size:clamp(42px,14vw,68px)}
-  .modal-wordmark{font-size:34px}
+  .lz-word{letter-spacing:.035em}
+  .hero-wordmark{font-size:clamp(46px,15vw,74px)}
+  .modal-wordmark{font-size:38px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .lz-a path{animation:none;stroke-dashoffset:0}
 }
