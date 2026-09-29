@@ -26,6 +26,23 @@ function formatPrice(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 0 });
 }
 
+
+function LanzinnisWordmark({ className = "" }: { className?: string }) {
+  return (
+    <div className={`lz-logo ${className}`} role="img" aria-label="Lanzinnis">
+      <div className="lz-word" aria-hidden="true">
+        <span>LANZ</span>
+        <svg className="lz-a" viewBox="0 0 120 100" preserveAspectRatio="xMidYMax meet">
+          <path strokeWidth="4" d="M4 100 C 16 62, 28 8, 46 5 C 64 2, 70 56, 80 84 C 86 98, 96 104, 116 101" />
+          <path strokeWidth="7" d="M34 22 C 44 8, 58 6, 66 14 C 78 28, 82 62, 90 82 C 96 96, 104 100, 118 98" />
+          <path strokeWidth="3.5" d="M52 10 C 62 4, 74 10, 80 24 C 88 42, 92 66, 100 82 C 105 92, 112 95, 120 94" />
+        </svg>
+        <span>NIS</span>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [open, setOpen] = useState(true);
   const [journey, setJourney] = useState<Journey>(null);
@@ -135,7 +152,7 @@ function App() {
 
             {journey === null && (
               <>
-                <div className="brand-wordmark modal-wordmark" aria-label="Lanzinnis">LANZINNIS</div>
+                <LanzinnisWordmark className="modal-wordmark" />
                 <span className="eyebrow">Como podemos te atender?</span>
                 <h2>Escolha por onde quer começar.</h2>
                 <div className="journey-grid">
@@ -251,7 +268,7 @@ function App() {
       <section className="hero">
         <div className="hero-shade" />
         <div className="hero-content">
-          <div className="brand-wordmark hero-wordmark" aria-label="Lanzinnis">LANZINNIS</div>
+          <LanzinnisWordmark className="hero-wordmark" />
         </div>
         <button className="reopen" onClick={() => { resetFlow(); setOpen(true); }}>Agendar atendimento</button>
       </section>
