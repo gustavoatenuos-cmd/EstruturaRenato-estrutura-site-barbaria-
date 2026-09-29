@@ -8,7 +8,6 @@ import {
   MapPin,
   MessageCircle,
   Scissors,
-  Sparkles,
   UserRound,
   X,
 } from "lucide-react";
@@ -40,6 +39,31 @@ function formatPrice(value: number) {
     currency: "BRL",
     minimumFractionDigits: 0,
   });
+}
+
+function BarberServiceIcon() {
+  return (
+    <svg className="service-symbol" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M10 11l28 26" />
+      <path d="M38 11L10 37" />
+      <circle cx="10" cy="10" r="5" />
+      <circle cx="10" cy="38" r="5" />
+      <path d="M29 8v32" />
+      <path d="M33 9v30" />
+      <path d="M37 10v28" />
+    </svg>
+  );
+}
+
+function ProsthesisServiceIcon() {
+  return (
+    <svg className="service-symbol prosthesis-symbol" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M8 31c4-11 11-17 16-17s12 6 16 17" />
+      <path d="M11 30c5-8 9-12 13-12s9 4 13 12" />
+      <path d="M14 29c4-5 7-8 10-8s6 3 10 8" />
+      <path d="M12 34c7 3 17 3 24 0" />
+    </svg>
+  );
 }
 
 function LanzinnisWordmark({ className = "" }: { className?: string }) {
@@ -185,21 +209,21 @@ function App() {
 
                 <div className="journey-grid">
                   <button className="journey-card light-card" onClick={() => setJourney("barbearia")}>
-                    <span className="journey-icon"><Scissors size={23} /></span>
+                    <span className="journey-icon"><BarberServiceIcon /></span>
                     <div>
                       <strong>Barbearia</strong>
-                      <p>Corte, barba, sobrancelha e combinações.</p>
+                      <p>Corte, barba, sobrancelha e combinações para o dia a dia.</p>
                     </div>
                     <em>Agendar horário <ArrowRight size={16} /></em>
                   </button>
 
                   <button className="journey-card dark-card" onClick={chooseProsthesis}>
-                    <span className="journey-icon"><Sparkles size={23} /></span>
+                    <span className="journey-icon"><ProsthesisServiceIcon /></span>
                     <div>
                       <strong>Prótese capilar</strong>
-                      <p>Antes e depois, processo e avaliação personalizada.</p>
+                      <p>O valor é definido após avaliar couro cabeludo, modelo indicado e adaptação da prótese ao seu caso.</p>
                     </div>
-                    <em>Conhecer solução <ArrowRight size={16} /></em>
+                    <em>Quero avaliar meu caso <ArrowRight size={16} /></em>
                   </button>
                 </div>
               </div>
@@ -357,13 +381,18 @@ function App() {
             <span className="eyebrow">Prótese capilar masculina</span>
             <h1>Veja a diferença. Depois decida.</h1>
             <p className="lead">
-              A proposta é integrar densidade, linha frontal e corte ao rosto sem deixar o resultado com aparência artificial.
+              Antes de definir modelo ou valor, avaliamos o seu caso. Entram nessa análise a condição do couro cabeludo, a área a ser trabalhada, o acabamento desejado e a adaptação da prótese ao seu perfil.
             </p>
 
             <div className="benefit-list">
-              <span><Check size={16} /> Avaliação personalizada</span>
-              <span><Check size={16} /> Aplicação e integração ao corte</span>
-              <span><Check size={16} /> Manutenção e higienização</span>
+              <span><Check size={16} /> Condição e área do couro cabeludo</span>
+              <span><Check size={16} /> Modelo, densidade e acabamento mais indicados</span>
+              <span><Check size={16} /> Adaptação, aceitação e manutenção da prótese</span>
+            </div>
+
+            <div className="evaluation-note">
+              <small>VALOR PERSONALIZADO</small>
+              <p>O investimento é informado após a avaliação, porque cada caso exige um modelo e uma aplicação diferentes.</p>
             </div>
 
             <a
@@ -372,7 +401,7 @@ function App() {
               target="_blank"
               rel="noreferrer"
             >
-              Quero uma avaliação <MessageCircle size={18} />
+              Quero avaliar meu caso <MessageCircle size={18} />
             </a>
           </div>
 
