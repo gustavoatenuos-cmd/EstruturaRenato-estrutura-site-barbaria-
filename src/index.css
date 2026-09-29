@@ -514,3 +514,41 @@ h2{font-size:clamp(40px,5vw,64px);margin-bottom:22px}
 @media(prefers-reduced-motion:reduce){
   *{scroll-behavior:auto!important}
 }
+
+
+/* ícones específicos dos dois caminhos */
+.service-symbol{
+  width:25px;
+  height:25px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.prosthesis-symbol{stroke-width:1.55}
+.journey-icon .service-symbol{display:block}
+
+/* educação de preço da prótese */
+.evaluation-note{
+  max-width:610px;
+  margin:-8px 0 30px;
+  padding:16px 18px;
+  border:1px solid #d4cdc4;
+  border-radius:16px;
+  background:rgba(255,255,255,.48);
+}
+.evaluation-note small{
+  display:block;
+  margin-bottom:7px;
+  font-size:8px;
+  font-weight:500;
+  letter-spacing:.16em;
+  color:#716a61;
+}
+.evaluation-note p{
+  margin:0;
+  color:#5f5952;
+  font-size:12px;
+  line-height:1.6;
+}
